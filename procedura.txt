@@ -1,0 +1,56 @@
+CREATE OR REPLACE PROCEDURE InsertEmployee (p_id_employee IN NUMBER,
+                                            p_first_name_employee IN VARCHAR2,
+                                            p_last_name_employee IN VARCHAR2, 
+                                            p_email_employee IN VARCHAR2, 
+                                            p_phone_number_employee IN VARCHAR2, 
+                                            p_hire_date_employee IN DATE,
+                                            p_job_id_employee IN VARCHAR2,
+                                            p_salary_employee IN NUMBER,
+                                            p_commision_employee IN NUMBER, 
+                                            p_manager_employee IN NUMBER,
+                                            p_department_employee IN NUMBER) IS 
+                                            
+                                
+BEGIN 
+        IF p_id_employee IS NULL
+        THEN RAISE id_is_null_exepction; 
+        END IF;
+                                            
+        IF p_last_name_employee IS NULL
+        THEN RAISE last_name_is_null_exception;
+        END IF; 
+        
+        IF p_email_employee IS NULL 
+        THEN RAISE email_is_null_exception;
+        END IF;
+        
+        IF p_job_id_employee IS NULL 
+        THEN RAISE job_id_is_null_exception; 
+        END IF;
+        
+        IF p_hire_date_employee > CURRENT_DATE
+        THEN RAISE impossible_date_exception;
+        END IF;
+        
+        INSERT INTO EMPLOYEES_COPY (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE,
+        JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID)
+        VALUES(p_id_employee, p_first_name_employee, p_last_name_employee, p_email_employee, p_phone_number_employee , p_hire_date_employee,
+        p_job_id_employee, p_salary_employee, p_commision_employee, p_manager_employee, p_department_employee);
+EXCEPTION 
+       WHEN id_is_null_exception
+       THEN RAISE_APPLICATION_ERROR(-15000,'ID CANNOT BE NULL ');
+       
+       WHEN last_name_is_null_exception
+       THEN RAISE_APPLICATION_ERROR(-20000,'LAST NAME CANNOT BE NULL ');
+       
+       WHEN email_is_null_exception
+       THEN RAISE_APPLICATION_ERROR(-25000,'EMAIL CANNOT BE NULL ');
+       
+       WHEN job_id_is_null_exception
+       THEN RAISE_APPLICATION_ERROR(-30000,'JOB ID CANNOT BE NULL ');
+       
+       WHEN impossible_date_exception
+       THEN RAISE_APPLICATION_ERROR(-35000,'IMPOSSIBLE DATE');
+       
+END InsertEmployee;
+        
